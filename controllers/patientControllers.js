@@ -28,3 +28,38 @@ export const createPatient = async (req, res) => {
 };
 
 
+export const getAllPatients = async (req, res) => {
+  try {
+    const patients = await Patient.find();
+
+    if (patients.length === 0) {
+      return res.status(404).json({
+        message: "No patient records found"
+      });
+    }
+
+    res.status(200).json(patients);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deletePatient = async (req, res) => {
+  try {
+    const deletedPatient = await Patient.findByIdAndDelete(req.params.id);
+
+    if (!deletedPatient) {
+      return res.status(404).json({
+        message: "Patient not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Patient deleted successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
